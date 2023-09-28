@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-6)_(g%_+n+)a04^x=su5=28qp5!+buh%x@t6=955nze$#om4xj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -166,6 +166,6 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_UNIQUE_EMAIL = True
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
-
 DEBUG = int(os.environ.get('DEBUG', default=0))
+
+DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
