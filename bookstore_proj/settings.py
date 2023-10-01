@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import socket
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -13,7 +14,7 @@ SECRET_KEY = 'django-insecure-6)_(g%_+n+)a04^x=su5=28qp5!+buh%x@t6=955nze$#om4xj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     # 'crispy_forms',
     'allauth',
     'allauth.account',
+    'debug_toolbar',
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
     'books.apps.BooksConfig',
@@ -44,6 +46,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'bookstore_proj.urls'
@@ -106,7 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
+INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -175,3 +181,22 @@ DEFAULT_FROM_EMAIL = 'admin@djangobookstore.com'
 STRIPE_TEST_PUBLISHABLE_KEY = os.environ.get('STRIPE_TEST_PUBLISHABLE_KEY')
 
 STRIPE_TEST_SECRET_KEY = os.environ.get('STRIPE_TEST_SECRET_KEY')
+
+CACHE_MEDDLEWARE_ALIAS = 'default'
+
+CACHE_MEDDLEWARE_CECONDS = 604800
+
+CACHE_MEDDLEWARE_KEY_PREFIX = ''
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='development')
+
+if ENVIRONMENT == 'production':
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NONSNIFF = True
+    SECURE_COOKIE_SECURE = True
+
