@@ -3,13 +3,13 @@ version: '3.7'
 services:
   web:
     build: .
-    command: python /code/manage.py runserver 0.0.0.0:8000
+    command: gunicorn bookstore_project.wsgi -b 0.0.0.0:8000
     environment:
       - ENVIRONMENT=production
       - SECRET_KEY=p_03fgte56453tmldhtlrgikbdg34tyohbmvv#$3k4m
       - DEBUG=0
-      - STRIPE_TEST_PUBLISHABLE_KEY=<pk_test_your_publishable_key_here>
-      - STRIPE_TEST_SECRET_KEY=<sk_test_your_secret_key_here>
+      - STRIPE_LIVE_PUBLISHABLE_KEY=<pk_test_your_publishable_key_here>
+      - STRIPE_LIVE_SECRET_KEY=<sk_test_your_secret_key_here>
     ports:
       - 8000:8000
     depends_on:
